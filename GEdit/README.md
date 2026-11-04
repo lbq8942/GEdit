@@ -1,8 +1,9 @@
 # GEdit
 
-GEdit is a geometry-aware method for sequential knowledge editing in large language models. It protects the core subspace of pretrained knowledge and adjusts regularization according to the editability of each request.
+This repository provides the official implementation and code for the paper **"Editing Large Language Models with Geometry-Aware Regularization"**.
 
-The method is described in [Editing Large Language Models with Geometry-Aware Regularization](<Editing_Large_Language_Models_with_Geometry_Aware_Regularization (2).pdf>).
+GEdit is a geometry-aware method for knowledge editing in large language models. It protects the core subspace of pretrained knowledge and adjusts regularization according to the editability of each request.
+
 
 ## Method
 
@@ -78,7 +79,7 @@ M^\top k_e
 }.
 $$
 
-The implementation extends this definition to a batch $K_e\in\mathbb R^{d\times b}$ by averaging the editabilities of its $b$ columns:
+Our code implementation extends this definition to a batch $K_e\in\mathbb R^{d\times b}$ by averaging the editabilities of its $b$ columns (batch size $b=1$ is its special case):
 
 $$
 \boxed{
@@ -119,8 +120,6 @@ $$
 H_e=H_{e-1}+\bar K_e\bar K_e^\top.
 $$
 
-This implementation extends the paper's single-edit adaptive $\mu_e$ rule to sequential and batched editing as described above.
-
 ## Setup
 
 Install dependencies:
@@ -138,13 +137,14 @@ Local checkpoints can be placed in the sibling <code>llms/</code> directory usin
 
 ## Run
 
-Example: 10,000 sequential CounterFact edits on GPT2-XL:
+Example: 10,000 sequential CounterFact edits on LLaMA3-8B-Instruct:
 
 ~~~bash
 python main.py \
-  llms=gpt2-xl \
+  llms=llama3-8b \
   data=multi_counterfact_20877 \
   num_edits=10000 \
+  gpu=0 \
   bs=1 \
   eval_every=10000 \
   save_name=gedit-10k
@@ -152,16 +152,13 @@ python main.py \
 
 The command-line arguments mean:
 
-- <code>llms</code>: model preset from <code>configs/llms/</code>, such as <code>gpt2-xl</code>, <code>gpt-j-6b</code>, or <code>llama3.1-8b</code>.
+- <code>llms</code>: model preset from <code>configs/llms/</code>, such as <code>gpt2-xl</code>, <code>gpt-j-6b</code>, or <code>llama3-8b</code>.
 - <code>data</code>: dataset name registered in <code>data/adapters/registry.py</code>.
 - <code>num_edits</code>: number of records taken in dataset order.
 - <code>bs</code>: edits applied at each step. Use <code>1</code> for fully sequential editing.
 - <code>eval_every</code>: evaluation interval measured in completed edits. The final state is always evaluated.
 - <code>save_name</code>: label used in result and optional checkpoint filenames.
 - <code>gpu</code>: CUDA device index visible to the process.
-- <code>kp_gpu</code>: if <code>true</code>, keep accumulated projected second moments on the GPU; otherwise keep them on the CPU.
-- <code>algs.geometry_gpu</code>: if <code>true</code>, retain geometry matrices on the GPU; <code>false</code> reduces GPU memory usage.
-- <code>algs.cuda_reserve_gib</code>: target amount of CUDA allocator memory reserved for the process; set to <code>0</code> to disable reservation.
 
 The two main method hyperparameters are:
 
