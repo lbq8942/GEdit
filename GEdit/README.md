@@ -22,9 +22,9 @@ $$
 where $b=\mathbb E[k]$, $U$ spans the core knowledge subspace, and $D$ is diagonal. Therefore,
 
 $$
-\operatorname{Cov}(k)=UU^\top+D,
+\mathrm{Cov}(k)=UU^\top+D,
 \qquad
-\boxed{\bar D=bb^\top+D}.
+\bar D=bb^\top+D.
 $$
 
 Given the empirical covariance $S_0=Q\Lambda Q^\top$, GEdit estimates
@@ -32,16 +32,16 @@ Given the empirical covariance $S_0=Q\Lambda Q^\top$, GEdit estimates
 $$
 U=[q_1,\ldots,q_r]\Lambda_{1:r,1:r}^{1/2},
 \qquad
-D=\operatorname{diag}(S_0-UU^\top).
+D=\mathrm{diag}(S_0-UU^\top).
 $$
 
 The smallest rank $r$ retaining an energy ratio $\gamma$ is selected:
 
 $$
-r=\min\left\{j:
+r=\min\{j:
 \frac{\sum_{i=1}^{j}\lambda_i}
      {\sum_{i=1}^{d}\lambda_i}
-\geq\gamma\right\}.
+\geq\gamma\}.
 $$
 
 Let $M$ be an orthonormal basis for the complement of $U$, so $M^\top U=0$. For edit keys $K_1$, residual $R_1=V_1-WK_1$, and regularization strength $\mu$, the paper gives
@@ -49,9 +49,9 @@ Let $M$ be an orthonormal basis for the complement of $U$, so $M^\top U=0$. For 
 $$
 \Delta_G=
 R_1K_1^\top M
-\left[
-M^\top\left(K_1K_1^\top+\mu\bar D\right)M
-\right]^{-1}
+[
+M^\top(K_1K_1^\top+\mu\bar D)M
+]^{-1}
 M^\top.
 $$
 
@@ -63,34 +63,30 @@ $$
 \mathcal E(k_e)=
 \frac{1}{\mu_e}
 k_e^\top M
-\left(M^\top\bar D M\right)^{-1}
+(M^\top\bar D M)^{-1}
 M^\top k_e.
 $$
 
 Setting the desired editability to $c>0$, namely $\mathcal E(k_e)=c$, gives
 
 $$
-\boxed{
 \mu_e=
 \frac{1}{c}
 k_e^\top M
-\left(M^\top\bar D M\right)^{-1}
-M^\top k_e
-}.
+(M^\top\bar D M)^{-1}
+M^\top k_e.
 $$
 
 Our code implementation extends this definition to a batch $K_e\in\mathbb R^{d\times b}$ by averaging the editabilities of its $b$ columns (batch size $b=1$ is its special case):
 
 $$
-\boxed{
 \mu_e=
 \frac{1}{cb}
-\operatorname{Tr}\left[
+\mathrm{tr}[
 K_e^\top M
-\left(M^\top\bar D M\right)^{-1}
+(M^\top\bar D M)^{-1}
 M^\top K_e
-\right]
-}.
+].
 $$
 
 For sequential editing, let
@@ -106,11 +102,11 @@ where $K_p$ contains previous edit keys. This repository stores only the accumul
 $$
 \Delta_e=
 R_e\bar K_e^\top
-\left(
+(
 \bar K_e\bar K_e^\top+
 H_{e-1}+
 \mu_e\bar D_M
-\right)^{-1}
+)^{-1}
 M^\top,
 $$
 
