@@ -1,0 +1,59 @@
+defaults:
+  - algs: gedit
+  - llms: gpt2-xl
+  - _self_
+
+seed: 0
+gpu: 0
+model_dtype: bfloat16 #choices=["auto","float32","bfloat16"]
+bs: 1
+# Optionally select edits whose subject lookup token is not at sequence position 0.
+skip_first_token_edits: false
+selection_pool_size: null
+# Optional ordered, model-independent list of safe record IDs. This takes
+# precedence over tokenizer-specific skip_first_token_edits filtering.
+selection_manifest: null
+data: multi_counterfact_20877 #choices=[multi_counterfact_20877,zsre_mend_eval_19086,zsre_eval_20k,wikibigedit_eval_17k ]
+num_edits: 100
+test_only: False
+baseline_only: False # evaluate the untouched model and exit without editing
+baseline_save_name: 100
+debug_mode: False #edit a small number of samples, for debug only,
+#it will not save model, you can ignore it.
+c_edit: False #continue to edit from previous edited model, you must ensure the previous checkpoint exists.
+eval_every: 1000000
+kp_gpu: True # Keep accumulated historical second moments/inverses on GPU
+save_model: False
+
+save_name: default #the prefix of the name of saved model, {dataset}-{save_name}-{model_name}.pt
+#format of save_name: 2000-bs100
+load_name: default #the prefix of the name of saved model to be loaded, {dataset}-{load_name}-{model_name}.pt
+#format of save_name: 2000-bs100
+data_dir: data/raw
+results_dir: results
+cache_dir: cache
+
+pre_eval: False
+lw_eval: False
+lbq_eval: False
+glue_eval: False
+glue_number_of_tests: 200
+glue_eval_batch_size: 4 # question count; MMLU candidate scoring uses 4x sequences
+edit_eval: False
+loc_eval: True
+loc_eval_batch_size: 64
+# Keep the historical one-shot ZSRE evaluation by default. Enable this only
+# when many/long prompts make the full logits tensor too large for GPU memory.
+zsre_eval_low_memory: False
+zsre_eval_batch_size: 8
+large: False
+
+
+
+# PushPlus final-result notification. pushplus_token_env is an optional fallback.
+pushplus_enabled: False
+pushplus_token: ""
+pushplus_token_env: PUSHPLUS_TOKEN # fallback when pushplus_token is empty
+pushplus_channel: wechat
+pushplus_option: null # required only for channels such as webhook
+pushplus_timeout: 10

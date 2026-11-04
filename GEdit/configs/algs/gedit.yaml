@@ -1,0 +1,27 @@
+name: gedit
+nullspace_threshold: 0.02
+L2: 10
+add_old_keys: True
+geometry_gpu: False # False: keep every layer's M and D_bar on CPU; move only the active layer to GPU
+empty_cache_between_layers: False # retain allocator cache so later jobs cannot take memory needed by subsequent layers
+cuda_reserve_gib: 28 # target per-process PyTorch reserved memory after GEdit initialization; 0 disables
+cuda_reserve_safety_gib: 2 # minimum device memory left free while warming the allocator cache
+value_cache: True # cache each sequentially computed v/z for exact replay after interruption
+stop_on_weight_collapse: True
+collapse_weight_norm_ratio: 5.0
+
+# null means: resolve by exact model name. Explicit CLI scalars take priority.
+prior_rank: null
+c: null
+
+prior_rank_default: 0.85
+prior_rank_by_model:
+  gpt2-xl: 0.60
+  EleutherAI/gpt-j-6B: 0.90
+  meta-llama/Llama-3.1-8B-Instruct: 0.85
+
+c_default: 1.25
+c_by_model:
+  gpt2-xl: 2.0
+  EleutherAI/gpt-j-6B: 1.25
+  meta-llama/Llama-3.1-8B-Instruct: 2.0
