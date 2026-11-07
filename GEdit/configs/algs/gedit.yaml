@@ -20,7 +20,7 @@ prior_rank_by_model:
   EleutherAI/gpt-j-6B: 0.90
   meta-llama/Llama-3.1-8B-Instruct: 0.85
 
-c_default: 2.0
+c_default: 1.25
 c_by_model:
   gpt2-xl: 2.0
   EleutherAI/gpt-j-6B: 2.0
